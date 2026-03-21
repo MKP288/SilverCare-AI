@@ -1,5 +1,5 @@
 // ─── Config ──────────────────────────────────────────────────────
-const API_KEY   = AIzaSyDAf2R5oEvnyc0GRiyjj92ZPUwxwJyEw4w; // 🔑 Replace with your key
+const API_KEY   = AIzaSyDAf2R5oEvnyc0GRiyjj92ZPUwxwJyEw4w;
 const API_MODEL = 'gemini-2.0-flash';
 const API_URL   = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 

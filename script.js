@@ -1,5 +1,5 @@
 // ─── Config ──────────────────────────────────────────────────────
-const API_KEY   = AIzaSyDAf2R5oEvnyc0GRiyjj92ZPUwxwJyEw4w;
+const API_KEY   = 'AIzaSyB74YseDbjVWcfpgaOOyT82ksAdx6wXVCc'; // 🔑 Replace with your key
 const API_MODEL = 'gemini-2.0-flash';
 const API_URL   = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
@@ -22,6 +22,64 @@ const chatHistory    = document.getElementById('chatHistory');
 const sidebarToggle  = document.getElementById('sidebarToggle');
 const sidebar        = document.getElementById('sidebar');
 const topbarTitle    = document.getElementById('topbarTitle');
+
+// ─── Voice Recognition ────────────────────────────────────────────
+const micBtn = document.getElementById('micBtn');
+let recognition = null;
+let isRecording = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
+  micBtn.style.display = 'none'; // hide mic if not supported
+} else {
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    messageInput.value = transcript;
+    messageInput.dispatchEvent(new Event('input'));
+  };
+
+  recognition.onerror = (e) => {
+    console.warn('Speech recognition error:', e.error);
+    stopRecording();
+  };
+
+  recognition.onend = () => {
+    if (isRecording) stopRecording();
+  };
+
+  micBtn.addEventListener('click', () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  });
+}
+
+function startRecording() {
+  messageInput.value = '';
+  messageInput.dispatchEvent(new Event('input'));
+  isRecording = true;
+  micBtn.classList.add('recording');
+  micBtn.title = 'Stop recording';
+  recognition.start();
+}
+
+function stopRecording() {
+  isRecording = false;
+  micBtn.classList.remove('recording');
+  micBtn.title = 'Voice input';
+  try { recognition.stop(); } catch (_) {}
+}
 
 // ─── Init ────────────────────────────────────────────────────────
 loadSessionsFromStorage();

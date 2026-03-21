@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SilverCare AI</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">💊</span>
+      <span class="logo-text">SilverCare AI</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-tab="medications">💊 Medications</button>
+      <button class="nav-btn" data-tab="today">✅ Today</button>
+      <button class="nav-btn" data-tab="health">🩺 Health Input</button>
+      <button class="nav-btn" data-tab="ai">🤖 AI Assistant</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="status-dot"></div>
+      <span id="backendStatus">Connecting...</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Alerts Banner -->
+    <div class="alerts-banner" id="alertsBanner" style="display:none;">
+      <div class="alerts-inner" id="alertsInner"></div>
+      <button class="alerts-close" id="alertsClose">Dismiss</button>
+    </div>
+
+    <!-- ── Tab: Medications ── -->
+    <section class="tab-content active" id="tab-medications">
+      <div class="page-header">
+        <h1>Medication Schedule</h1>
+        <p>Manage your daily medications and view AI explanations.</p>
+      </div>
+
+      <!-- Add Medication Form -->
+      <div class="card">
+        <h2 class="card-title">Add Medication</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Medication Name</label>
+            <input type="text" id="medName" placeholder="e.g. Aspirin" />
+          </div>
+          <div class="form-group">
+            <label>Dose</label>
+            <input type="text" id="medDose" placeholder="e.g. 100mg" />
+          </div>
+          <div class="form-group">
+            <label>Frequency</label>
+            <select id="medFrequency">
+              <option value="daily">Daily</option>
+              <option value="twice daily">Twice Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="as needed">As Needed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Times (comma separated)</label>
+            <input type="text" id="medTimes" placeholder="e.g. 08:00, 20:00" />
+          </div>
+          <div class="form-group full-width">
+            <label>Notes (optional)</label>
+            <input type="text" id="medNotes" placeholder="e.g. Take with food" />
+          </div>
+        </div>
+        <button class="btn btn-primary" id="addMedBtn">+ Add Medication</button>
+      </div>
+
+      <!-- Medication List -->
+      <div class="card">
+        <h2 class="card-title">Current Medications</h2>
+        <div id="medicationList">
+          <p class="empty-msg">No medications added yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tab: Today ── -->
+    <section class="tab-content" id="tab-today">
+      <div class="page-header">
+        <h1>Today's Medications</h1>
+        <p id="todayDate"></p>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Confirm Your Doses</h2>
+        <div id="todayList">
+          <p class="empty-msg">No medications scheduled.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Adherence Summary</h2>
+        <div class="adherence-row" id="adherenceRow">
+          <div class="adherence-stat">
+            <span class="stat-number green" id="takenCount">0</span>
+            <span class="stat-label">Taken</span>
+          </div>
+          <div class="adherence-divider"></div>
+          <div class="adherence-stat">
+            <span class="stat-number red" id="missedCount">0</span>
+            <span class="stat-label">Missed</span>
+          </div>
+          <div class="adherence-divider"></div>
+          <div class="adherence-stat">
+            <span class="stat-number blue" id="adherencePct">0%</span>
+            <span class="stat-label">Adherence Rate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tab: Health Input ── -->
+    <section class="tab-content" id="tab-health">
+      <div class="page-header">
+        <h1>Daily Health Check-In</h1>
+        <p>Log how you're feeling today.</p>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">How are you feeling?</h2>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Mood</label>
+            <div class="mood-selector">
+              <button class="mood-btn" data-mood="good">😊 Good</button>
+              <button class="mood-btn" data-mood="fair">😐 Fair</button>
+              <button class="mood-btn" data-mood="poor">😔 Poor</button>
+            </div>
+            <input type="hidden" id="healthMood" value="" />
+          </div>
+          <div class="form-group">
+            <label>Blood Pressure</label>
+            <input type="text" id="healthBP" placeholder="e.g. 120/80" />
+          </div>
+          <div class="form-group">
+            <label>Heart Rate (bpm)</label>
+            <input type="number" id="healthHR" placeholder="e.g. 72" />
+          </div>
+          <div class="form-group full-width">
+            <label>Symptoms</label>
+            <input type="text" id="healthSymptoms" placeholder="e.g. mild headache, fatigue" />
+          </div>
+          <div class="form-group full-width">
+            <label>Additional Notes</label>
+            <textarea id="healthNotes" rows="3" placeholder="Anything else to note..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="submitHealthBtn">Submit Check-In</button>
+      </div>
+
+      <!-- Past entries -->
+      <div class="card">
+        <h2 class="card-title">Recent Check-Ins</h2>
+        <div id="healthHistory">
+          <p class="empty-msg">No check-ins recorded yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tab: AI Assistant ── -->
+    <section class="tab-content" id="tab-ai">
+      <div class="page-header">
+        <h1>AI Health Assistant</h1>
+        <p>Ask questions about your medications or health in plain language.</p>
+      </div>
+
+      <div class="card ai-card">
+        <div class="ai-chat-window" id="aiChatWindow">
+          <div class="ai-welcome">
+            <div class="ai-avatar">🤖</div>
+            <p>Hello! I'm your SilverCare AI assistant. You can ask me about your medications, what side effects to watch for, or general health questions. How can I help you today?</p>
+          </div>
+        </div>
+
+        <div class="ai-suggestions">
+          <button class="chip" data-q="What should I know about taking my medications?">General tips</button>
+          <button class="chip" data-q="What are common side effects I should watch for?">Side effects</button>
+          <button class="chip" data-q="Can you give me a summary of my health today?">Daily summary</button>
+        </div>
+
+        <div class="ai-input-row">
+          <input type="text" id="aiInput" placeholder="Ask a health question..." />
+          <button class="btn btn-primary" id="aiSendBtn">Send</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

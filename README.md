@@ -1,9 +1,9 @@
-#Generative-AI
+# Generative-AI
 An AI-powered study assistant built using the Gemini API. This tool helps students understand concepts, generate summaries, and create practice questions to reinforce learning.
 
 [Live Demo](https://mkp288.github.io/SilverCare-AI/)
 
-#Setup
+## Setup
 To run this project locally, you’ll need your own Gemini API key:
 1. Obtain a Gemini API key.
 2. Open intelligence.py.

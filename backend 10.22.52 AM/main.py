@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from . import database
-from . import scheduler
-from . import intelligence
-from .models import MedicationCreate, HealthInput, DoseLogInput, AIRequest
+import database
+import scheduler
+import intelligence
+from models import MedicationCreate, HealthInput, DoseLogInput, AIRequest
 
 
 @asynccontextmanager

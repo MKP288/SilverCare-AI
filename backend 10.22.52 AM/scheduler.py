@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
-from . import database
+import database
 
 
 def check_medication_reminders():
@@ -22,10 +22,10 @@ def check_medication_reminders():
                     print(f"⚠️ ALERT: Missed Dose Detected! You have not logged taking {med['name']} scheduled for {sched_time_str}.")
 
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(check_medication_reminders, "interval", minutes=1)
-
+# rename the variable to avoid shadowing
+_scheduler = BackgroundScheduler()
+_scheduler.add_job(check_medication_reminders, "interval", minutes=1)
 
 def start_scheduler():
-    if not scheduler.running:
-        scheduler.start()
+    if not _scheduler.running:
+        _scheduler.start()

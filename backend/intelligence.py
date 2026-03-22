@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import os
 
-genai.configure(api_key="AIzaSyCbq-cDcq_HgvujQxdbJYEUTQFnUc8G3-E")     ## Wirte your Gemini_API
+genai.configure(api_key="")     ## Wirte your Gemini_API
 
 
 def explain_medication(med_name: str) -> str:
